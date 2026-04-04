@@ -1,3 +1,5 @@
 4/4/2026
 -Created github repo.
 -Created ProgressLog.txt to track project as it progresses.
+-Created directories.
+-Created main.py and rag.py
