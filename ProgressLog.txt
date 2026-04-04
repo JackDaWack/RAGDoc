@@ -3,3 +3,6 @@
 -Created ProgressLog.txt to track project as it progresses.
 -Created directories.
 -Created main.py and rag.py
+-Implemented libraries in main.py
+-Implemented load_documents function in rag.py
+-Implemented generate_embeddings in rag.py
