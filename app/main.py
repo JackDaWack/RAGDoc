@@ -4,6 +4,9 @@ import time
 
 app = FastAPI()
 
+class Query(BaseModel):
+    question: str
+
 
 @app.get("/")
 def read_root():

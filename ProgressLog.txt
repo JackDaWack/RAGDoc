@@ -2,6 +2,9 @@
 -Added documents to data repository from fda regulatory website: https://www.fda.gov/regulatory-information/search-fda-guidance-documents
 -Implemented relevant document retrieval and response generation in rag.py.
 -Added root to main.py.
+-Added and implemented home.html.
+-Added openai key to rag.py.
+-Added Query class to main.py.
 
 4/4/2026
 -Created github repo.

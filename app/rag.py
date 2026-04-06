@@ -3,6 +3,10 @@ import json
 import openai
 import torch
 
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+path = "/data/"
+
 def load_documents(directory):
     documents = []
     for filename in os.listdir(directory):
