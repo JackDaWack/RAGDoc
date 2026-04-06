@@ -1,3 +1,8 @@
+4/6/2026
+-Added documents to data repository from fda regulatory website: https://www.fda.gov/regulatory-information/search-fda-guidance-documents
+-Implemented relevant document retrieval and response generation in rag.py.
+-Added root to main.py.
+
 4/4/2026
 -Created github repo.
 -Created ProgressLog.txt to track project as it progresses.
