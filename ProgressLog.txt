@@ -1,3 +1,8 @@
+4/7/2026
+-Changed path variable in rag.py.
+-Implemented vector storage and retrieval in rag.py.
+-Added and implemented query endpoint in main.py
+
 4/6/2026
 -Added documents to data repository from fda regulatory website: https://www.fda.gov/regulatory-information/search-fda-guidance-documents
 -Implemented relevant document retrieval and response generation in rag.py.

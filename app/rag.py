@@ -5,7 +5,7 @@ import torch
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-path = "/data/"
+path = os.path.join(os.path.dirname(__file__), 'documents')
 
 def load_documents(directory):
     documents = []
@@ -37,3 +37,11 @@ def generate_response(query, relevant_docs):
         max_tokens=150
     )
     return response.choices[0].text.strip()
+
+def store_embeddings(embeddings, filepath):
+    with open(filepath, 'w') as f:
+        json.dump(embeddings, f)
+
+def load_embeddings(filepath):
+    with open(filepath, 'r') as f:
+        return json.load(f)
