@@ -15,6 +15,6 @@ def read_root():
 
 @app.post("/query")
 def answer_query(query: Query):
-    docs = rag.retrieve_relevant_documents(query.question, rag.load_documents(rag.path), rag.load_embeddings('embeddings.json'))
-    answer = rag.generate_response(query.question, docs)
+    relevant_docs = rag.retrieve_relevant_documents(query.question, rag.load_documents(rag.path), rag.load_embeddings(os.path.join(rag.path, "embeddings.json")))
+    answer = rag.generate_response(query.question, relevant_docs)
     return {"answer": answer}

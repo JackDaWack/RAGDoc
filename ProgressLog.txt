@@ -2,6 +2,9 @@
 -Changed path variable in rag.py.
 -Implemented vector storage and retrieval in rag.py.
 -Added and implemented query endpoint in main.py
+-Added precompute.py to generate embeddings.
+-Moved FDA guideline documents to new documents directory.
+-Added pdfplumber in rag.py for access to data in documents.
 
 4/6/2026
 -Added documents to data repository from fda regulatory website: https://www.fda.gov/regulatory-information/search-fda-guidance-documents
