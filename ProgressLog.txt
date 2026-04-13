@@ -6,6 +6,8 @@
 -Implemented data chunk handling in generate_embeddings under rag.py.
 -Stored new embeddings in embeddings.json.
 -Added baseline implementation to index.html
+-Implemented query field and response content placeholder in index.html.
+-Added app.js file in frontend.
 
 4/7/2026
 -Changed path variable in rag.py.
