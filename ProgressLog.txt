@@ -5,6 +5,7 @@
 -Added index.html to frontend folder
 -Implemented data chunk handling in generate_embeddings under rag.py.
 -Stored new embeddings in embeddings.json.
+-Added baseline implementation to index.html
 
 4/7/2026
 -Changed path variable in rag.py.
