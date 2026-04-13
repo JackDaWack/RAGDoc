@@ -1,3 +1,9 @@
+4/13/2026
+-Added frontend and backend directories.
+-removed home.html.
+-moved app and data directories under backend directory.
+-Added index.html to frontend folder
+
 4/7/2026
 -Changed path variable in rag.py.
 -Implemented vector storage and retrieval in rag.py.
