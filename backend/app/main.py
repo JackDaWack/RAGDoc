@@ -15,6 +15,14 @@ def read_root():
 
 @app.post("/query")
 def answer_query(query: Query):
-    relevant_docs = rag.retrieve_relevant_documents(query.question, rag.load_documents(rag.path), rag.load_embeddings(os.path.join(rag.path, "embeddings.json")))
-    answer = rag.generate_response(query.question, relevant_docs)
-    return {"answer": answer}
+    start_time = time.time()
+    documents = rag.load_documents(rag.path)
+    embeddings = rag.generate_embeddings(documents)
+    relevant_docs = rag.retrieve_relevant_documents(query.question, documents, embeddings)
+    end_time = time.time()
+    print(f"Query processed in {end_time - start_time:.2f} seconds")
+    return {"answer": "This is a placeholder answer.", "relevant_docs": relevant_docs}
+
+@app.get("/response")
+def get_response():
+    return {"response": "This is a placeholder response."}

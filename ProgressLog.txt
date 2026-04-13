@@ -8,6 +8,9 @@
 -Added baseline implementation to index.html
 -Implemented query field and response content placeholder in index.html.
 -Added app.js file in frontend.
+-Added query and response functions in app.js
+-Changed query endpoint implementation in main.py.
+-Added response endpoint in main.py
 
 4/7/2026
 -Changed path variable in rag.py.
