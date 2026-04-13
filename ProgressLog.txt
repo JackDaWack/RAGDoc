@@ -3,6 +3,8 @@
 -removed home.html.
 -moved app and data directories under backend directory.
 -Added index.html to frontend folder
+-Implemented data chunk handling in generate_embeddings under rag.py.
+-Stored new embeddings in embeddings.json.
 
 4/7/2026
 -Changed path variable in rag.py.

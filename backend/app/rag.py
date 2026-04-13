@@ -28,9 +28,41 @@ def load_documents(directory):
 
 def generate_embeddings(documents):
     embeddings = []
+    max_tokens = 8000  # Safety margin below 8192 limit
+    
     for doc in documents:
-        response = client.embeddings.create(input=doc, model="text-embedding-3-small")
-        embeddings.append(response.data[0].embedding)
+        # Split document into chunks if it's too long
+        # Rough estimate: 1 token ≈ 4 characters
+        words = doc.split()
+        chunks = []
+        current_chunk = []
+        current_length = 0
+        
+        for word in words:
+            word_length = len(word) + 1  # +1 for space
+            if current_length + word_length > max_tokens * 4:  # Convert token limit to characters
+                if current_chunk:
+                    chunks.append(" ".join(current_chunk))
+                current_chunk = [word]
+                current_length = word_length
+            else:
+                current_chunk.append(word)
+                current_length += word_length
+        
+        if current_chunk:
+            chunks.append(" ".join(current_chunk))
+        
+        # Generate embeddings for each chunk and average them
+        chunk_embeddings = []
+        for chunk in chunks:
+            response = client.embeddings.create(input=chunk, model="text-embedding-3-small")
+            chunk_embeddings.append(response.data[0].embedding)
+        
+        # Average embeddings across chunks
+        if chunk_embeddings:
+            avg_embedding = [sum(x) / len(chunk_embeddings) for x in zip(*chunk_embeddings)]
+            embeddings.append(avg_embedding)
+    
     return embeddings
 
 def retrieve_relevant_documents(query, documents, embeddings, top_k=3):
