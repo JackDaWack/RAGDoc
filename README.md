@@ -16,4 +16,4 @@ Jackson Netter
 - https://www.linkedin.com/in/jackson-netter-75445b1ab/
 
 ##### A Little Bit About Me
-Hi, I'm Jack. I graduated in December 2024 with Bachelor's in CompSci, looking to take a byte into Fullstack Development. Something fun about myself is that I try to go to the gym regularly and currently work in Medical Devices.
+Hi, I'm Jack. I graduated in December 2024 with Bachelor's in CompSci, looking to take a byte into Fullstack Development. Something fun about myself is that I love dinosaurs, specifically ceratopsians.
