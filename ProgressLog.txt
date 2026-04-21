@@ -1,3 +1,8 @@
+4/20/2026
+-Updated readme file with planned features.
+-Added files for app authentication implementation.
+-Marked authentication goal in readme under planned features section as (In Progress)
+
 4/13/2026
 -Added frontend and backend directories.
 -removed home.html.
