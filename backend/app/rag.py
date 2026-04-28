@@ -3,6 +3,7 @@ import json
 import torch
 import pdfplumber
 from openai import OpenAI
+import tiktoken
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -26,8 +27,15 @@ def ingest_data(directory, embedding_file):
                 documents.append({"filename": filename, "text": text})
     #Embedding generation.
     embeddings = {}
+    encoding = tiktoken.encoding_for_model("text-embedding-3-large")
+    max_tokens = 8191
+
     for doc in documents:
-        response = client.embeddings.create(input=doc["text"], model="text-embedding-3-small")
+        # Truncate text if it exceeds the maximum token limit
+        tokens = encoding.encode(doc["text"])
+        if len(tokens) > max_tokens:
+            doc["text"] = encoding.decode(tokens[:max_tokens])
+        response = client.embeddings.create(input=doc["text"], model="text-embedding-3-large")
         embeddings[doc["filename"]] = response.data[0].embedding
     # Save embeddings.
     with open(embedding_file, 'w') as f:
@@ -35,7 +43,7 @@ def ingest_data(directory, embedding_file):
 
 def handle_query(query, embeddings):
     # Generate embedding for the query.
-    response = client.embeddings.create(input=query, model="text-embedding-3-small")
+    response = client.embeddings.create(input=query, model="text-embedding-3-large")
     query_embedding = response.data[0].embedding
     # Retrieve relevant documents based on relevance to query.
     relevant_docs = []
@@ -50,5 +58,14 @@ def generate_response(query, relevant_docs):
     # Generate a response using the relevant documents.
     context = "\n".join([f"Document: {doc}" for doc in relevant_docs])
     prompt = f"Answer the following question based on the provided documents:\n\n{context}\n\nQuestion: {query}"
+    
+    encoding = tiktoken.encoding_for_model("gpt-4o")
+    token_count = len(encoding.encode(prompt))
+
+    if token_count > 8191:
+        available_tokens = 8191 - len(encoding.encode(f"Answer the following question based on the provided documents:\n\nQuestion: {query}"))
+        truncated_context = encoding.decode(encoding.encode(context)[:available_tokens])
+        prompt = f"Answer the following question based on the provided documents:\n\n{truncated_context}\n\nQuestion: {query}"
+    
     response = client.chat.completions.create(model="gpt-4o", messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}])
     return response.choices[0].message.content

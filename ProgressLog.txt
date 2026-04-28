@@ -4,6 +4,11 @@
 -Edited query handler implementation.
 -Implemented response generation in rag.py.
 -Re-implemented precompute.py to reflect recent changes in rag.py.
+-Changed text-emebedding model size from small to large on line 30 in rag.py
+-Added tiktoken
+-Modified ingest_data in rag.py.
+-Modified generate_response in rag.py.
+-Precomputed new embeddings.
 
 4/20/2026
 -Updated readme file with planned features.
