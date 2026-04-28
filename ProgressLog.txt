@@ -1,6 +1,8 @@
 4/28/2026
 -Cut load_documents, generate_embeddings and store_embeddings functions and replaced with ingest_data.
 -Implemented query handler function in rag.py.
+-Edited query handler implementation.
+-Implemented response generation in rag.py.
 
 4/20/2026
 -Updated readme file with planned features.

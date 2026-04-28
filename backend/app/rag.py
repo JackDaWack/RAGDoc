@@ -33,16 +33,22 @@ def ingest_data(directory, embedding_file):
     with open(embedding_file, 'w') as f:
         json.dump(embeddings, f)
 
-def handle_query(query, documents, embeddings):
+def handle_query(query, embeddings):
     # Generate embedding for the query.
     response = client.embeddings.create(input=query, model="text-embedding-3-small")
     query_embedding = response.data[0].embedding
-    # Retrieve relevant documents based on cosine similarity.
+    # Retrieve relevant documents based on relevance to query.
     relevant_docs = []
-    for doc in documents:
-        doc_embedding = embeddings.get(doc["filename"])
-        if doc_embedding:
-            similarity = cosine_similarity(query_embedding, doc_embedding)
-            if similarity > 0.7:  # Threshold for relevance
-                relevant_docs.append(doc)
+    for filename, doc_embedding in embeddings.items():
+        # Calculate cosine similarity (or any other similarity metric).
+        similarity = torch.nn.functional.cosine_similarity(torch.tensor(query_embedding), torch.tensor(doc_embedding), dim=0).item()
+        if similarity > 0.5:  # Threshold for relevance
+            relevant_docs.append(filename)
     return relevant_docs
+
+def generate_response(query, relevant_docs):
+    # Generate a response using the relevant documents.
+    context = "\n".join([f"Document: {doc}" for doc in relevant_docs])
+    prompt = f"Answer the following question based on the provided documents:\n\n{context}\n\nQuestion: {query}"
+    response = client.chat.completions.create(model="gpt-4o", messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}])
+    return response.choices[0].message.content
