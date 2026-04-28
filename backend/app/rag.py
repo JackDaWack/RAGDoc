@@ -15,6 +15,7 @@ def load_embeddings(filepath):
     with open(filepath, 'r') as f:
         return json.load(f)
 
+#Ingest data and generate embeddings (run once to create the embedding file)
 def ingest_data(directory, embedding_file):
     #Document loading.
     documents = []
@@ -31,3 +32,17 @@ def ingest_data(directory, embedding_file):
     # Save embeddings.
     with open(embedding_file, 'w') as f:
         json.dump(embeddings, f)
+
+def handle_query(query, documents, embeddings):
+    # Generate embedding for the query.
+    response = client.embeddings.create(input=query, model="text-embedding-3-small")
+    query_embedding = response.data[0].embedding
+    # Retrieve relevant documents based on cosine similarity.
+    relevant_docs = []
+    for doc in documents:
+        doc_embedding = embeddings.get(doc["filename"])
+        if doc_embedding:
+            similarity = cosine_similarity(query_embedding, doc_embedding)
+            if similarity > 0.7:  # Threshold for relevance
+                relevant_docs.append(doc)
+    return relevant_docs
