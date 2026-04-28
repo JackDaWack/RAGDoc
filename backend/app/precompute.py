@@ -1,11 +1,9 @@
 import rag
 import os
 def precompute_embeddings():
-
-    docs = rag.load_documents(rag.path)
-    embeddings = rag.generate_embeddings(docs)
-    embeddings_path = os.path.join(os.path.dirname(rag.path), "embeddings.json")
-    rag.store_embeddings(embeddings, embeddings_path)
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "documents"))
+    embedding_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "embeddings.json"))
+    rag.ingest_data(path, embedding_file)
 
 if __name__ == "__main__":
     precompute_embeddings()

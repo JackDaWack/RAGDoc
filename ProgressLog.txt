@@ -3,6 +3,7 @@
 -Implemented query handler function in rag.py.
 -Edited query handler implementation.
 -Implemented response generation in rag.py.
+-Re-implemented precompute.py to reflect recent changes in rag.py.
 
 4/20/2026
 -Updated readme file with planned features.
