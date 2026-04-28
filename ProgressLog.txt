@@ -9,6 +9,8 @@
 -Modified ingest_data in rag.py.
 -Modified generate_response in rag.py.
 -Precomputed new embeddings.
+-Created querytester.py to test query handling and response generation.
+-Implemented querytester.py
 
 4/20/2026
 -Updated readme file with planned features.
