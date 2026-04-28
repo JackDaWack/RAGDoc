@@ -11,6 +11,7 @@
 -Precomputed new embeddings.
 -Created querytester.py to test query handling and response generation.
 -Implemented querytester.py
+-Edited querytester.py implementation.
 
 4/20/2026
 -Updated readme file with planned features.
