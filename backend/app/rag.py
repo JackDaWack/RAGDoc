@@ -16,56 +16,80 @@ def load_embeddings(filepath):
     with open(filepath, 'r') as f:
         return json.load(f)
 
-#Ingest data and generate embeddings (run once to create the embedding file)
+def load_documents(directory):
+    documents = {}
+    for filename in os.listdir(directory):
+        if filename.endswith('.pdf'):
+            with pdfplumber.open(os.path.join(directory, filename)) as pdf:
+                text = "\n".join(page.extract_text() or "" for page in pdf.pages)
+                documents[filename] = text
+    return documents
+
+# Ingest data and generate embeddings (run once to create the embedding file)
 def ingest_data(directory, embedding_file):
-    #Document loading.
     documents = []
     for filename in os.listdir(directory):
         if filename.endswith('.pdf'):
             with pdfplumber.open(os.path.join(directory, filename)) as pdf:
-                text = "\n".join(page.extract_text() for page in pdf.pages)
+                text = "\n".join(page.extract_text() or "" for page in pdf.pages)
                 documents.append({"filename": filename, "text": text})
-    #Embedding generation.
+    
     embeddings = {}
     encoding = tiktoken.encoding_for_model("text-embedding-3-large")
     max_tokens = 8191
 
     for doc in documents:
-        # Truncate text if it exceeds the maximum token limit
         tokens = encoding.encode(doc["text"])
         if len(tokens) > max_tokens:
             doc["text"] = encoding.decode(tokens[:max_tokens])
         response = client.embeddings.create(input=doc["text"], model="text-embedding-3-large")
         embeddings[doc["filename"]] = response.data[0].embedding
-    # Save embeddings.
+
     with open(embedding_file, 'w') as f:
         json.dump(embeddings, f)
 
-def handle_query(query, embeddings):
-    # Generate embedding for the query.
+# Retrieve relevant documents and include their text.
+def handle_query(query, embeddings, top_k=5, threshold=0.5):
     response = client.embeddings.create(input=query, model="text-embedding-3-large")
     query_embedding = response.data[0].embedding
-    # Retrieve relevant documents based on relevance to query.
+
+    documents = load_documents(path)
     relevant_docs = []
     for filename, doc_embedding in embeddings.items():
-        # Calculate cosine similarity (or any other similarity metric).
         similarity = torch.nn.functional.cosine_similarity(torch.tensor(query_embedding), torch.tensor(doc_embedding), dim=0).item()
-        if similarity > 0.5:  # Threshold for relevance
-            relevant_docs.append(filename)
-    return relevant_docs
+        if similarity > threshold:
+            relevant_docs.append({
+                "filename": filename,
+                "text": documents.get(filename, ""),
+                "similarity": similarity,
+            })
 
-def generate_response(query, relevant_docs):
-    # Generate a response using the relevant documents.
-    context = "\n".join([f"Document: {doc}" for doc in relevant_docs])
-    prompt = f"Answer the following question based on the provided documents:\n\n{context}\n\nQuestion: {query}"
-    
-    encoding = tiktoken.encoding_for_model("gpt-4o")
-    token_count = len(encoding.encode(prompt))
+    relevant_docs.sort(key=lambda doc: doc["similarity"], reverse=True)
+    return relevant_docs[:top_k]
 
-    if token_count > 8191:
-        available_tokens = 8191 - len(encoding.encode(f"Answer the following question based on the provided documents:\n\nQuestion: {query}"))
-        truncated_context = encoding.decode(encoding.encode(context)[:available_tokens])
-        prompt = f"Answer the following question based on the provided documents:\n\n{truncated_context}\n\nQuestion: {query}"
-    
-    response = client.chat.completions.create(model="gpt-4o", messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}])
+# Generate a response that is forced to use the retrieved document text.
+def generate_response(query, relevant_docs, max_docs=3):
+    if not relevant_docs:
+        return "I don't know based on the provided documents."
+
+    context = "\n\n".join([
+        f"Document: {doc['filename']}\n\n{doc['text']}"
+        for doc in relevant_docs[:max_docs]
+    ])
+
+    prompt = (
+        "Answer only from the provided documents below. "
+        "Do not use any external knowledge beyond these documents. "
+        "If the answer is not in the documents, reply:\n\n"
+        '"I don\'t know based on the provided documents."\n\n'
+        f"Documents:\n{context}\n\nQuestion: {query}"
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that answers only from the provided documents."},
+            {"role": "user", "content": prompt},
+        ],
+    )
     return response.choices[0].message.content
