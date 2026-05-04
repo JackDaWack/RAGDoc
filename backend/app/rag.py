@@ -49,7 +49,7 @@ def ingest_data(directory, embedding_file):
         json.dump(embeddings, f)
 
 # Retrieve relevant documents and include their text.
-def handle_query(query, embeddings, top_k=3, threshold=0.3):
+def handle_query(query, embeddings, top_k=1, threshold=0.3):
     response = client.embeddings.create(input=query, model="text-embedding-3-large")
     query_embedding = response.data[0].embedding
 
@@ -57,8 +57,8 @@ def handle_query(query, embeddings, top_k=3, threshold=0.3):
     relevant_docs = []
     for filename, doc_embedding in embeddings.items():
         similarity = torch.nn.functional.cosine_similarity(torch.tensor(query_embedding), torch.tensor(doc_embedding), dim=0).item()
-        print(f"Document: {filename}, Similarity: {similarity:.4f}")
         if similarity > threshold:
+            #print(f"Document: {filename}")
             relevant_docs.append({
                 "filename": filename,
                 "text": documents.get(filename, ""),
@@ -82,11 +82,8 @@ def generate_response(query, relevant_docs):
         "Answer only from the provided documents below. "
         "Do not use any external knowledge beyond these documents. "
         "Format your answer as a concise summary of the relevant information. "
-        "If the answer is not in the documents, reply:\n\n"
-        '"I don\'t know based on the provided documents."\n\n'
         f"Documents:\n{context}\n\nQuestion: {query}"
     )
-    print(f"Context:\n{context}")
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
