@@ -1,3 +1,8 @@
+5/4/2026
+-Edited default response in generate_response in rag.py.
+-Edited cosines similiarity threshold in rag.py's query handler.
+-Added new instructions to the openai prompt in generate_response in rag.py.
+
 4/28/2026
 -Cut load_documents, generate_embeddings and store_embeddings functions and replaced with ingest_data.
 -Implemented query handler function in rag.py.
