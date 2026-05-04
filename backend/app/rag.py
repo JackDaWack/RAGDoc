@@ -12,18 +12,22 @@ path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "do
 if not os.path.exists(path):
     raise FileNotFoundError(f"Data directory not found: {path}")
 
-def load_embeddings(filepath):
-    with open(filepath, 'r') as f:
-        return json.load(f)
+class RAG:
+    def __init__(self):
+        self.embeddings = None
+        self.documents = None
 
-def load_documents(directory):
-    documents = {}
-    for filename in os.listdir(directory):
-        if filename.endswith('.pdf'):
-            with pdfplumber.open(os.path.join(directory, filename)) as pdf:
-                text = "\n".join(page.extract_text() or "" for page in pdf.pages)
-                documents[filename] = text
-    return documents
+    def load_embeddings(self, filepath):
+        with open(filepath, 'r') as f:
+            self.embeddings = json.load(f)
+
+    def load_documents(self, directory):
+        self.documents = {}
+        for filename in os.listdir(directory):
+            if filename.endswith('.pdf'):
+                with pdfplumber.open(os.path.join(directory, filename)) as pdf:
+                    text = "\n".join(page.extract_text() or "" for page in pdf.pages)
+                    self.documents[filename] = text
 
 # Ingest data and generate embeddings (run once to create the embedding file)
 def ingest_data(directory, embedding_file):

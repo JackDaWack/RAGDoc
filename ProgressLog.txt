@@ -4,6 +4,9 @@
 -Added new instructions to the openai prompt in generate_response in rag.py.
 -Changed top_k default value in handle_query from 3 to 1.
 -Edited prompt instructions in generate_response in rag.py.
+-Removed unused code from main.py and currently unused files.
+-Added rag preparation to root.
+-Added new RAG class to rag.py.
 
 4/28/2026
 -Cut load_documents, generate_embeddings and store_embeddings functions and replaced with ingest_data.

@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 import time
@@ -8,21 +9,21 @@ app = FastAPI()
 class Query(BaseModel):
     question: str
 
+def prep_rag():
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "embeddings.json"))
+    embeddings = rag.load_embeddings(path)
+    return embeddings
+
 
 @app.get("/")
 def read_root():
+    prep_rag()
     return {"Hello": "World"}
 
 @app.post("/query")
-def answer_query(query: Query):
-    start_time = time.time()
-    documents = rag.load_documents(rag.path)
-    embeddings = rag.generate_embeddings(documents)
-    relevant_docs = rag.retrieve_relevant_documents(query.question, documents, embeddings)
-    end_time = time.time()
-    print(f"Query processed in {end_time - start_time:.2f} seconds")
-    return {"answer": "This is a placeholder answer.", "relevant_docs": relevant_docs}
+def query():
+    pass
 
-@app.get("/response")
+@app.post("/response")
 def get_response():
-    return {"response": "This is a placeholder response."}
+    pass
