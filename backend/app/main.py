@@ -10,9 +10,10 @@ class Query(BaseModel):
     question: str
 
 def prep_rag():
+    rag_instance = rag.RAG()
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "embeddings.json"))
-    embeddings = rag.load_embeddings(path)
-    return embeddings
+    rag_instance.load_embeddings(path)
+    return rag_instance
 
 
 @app.get("/")

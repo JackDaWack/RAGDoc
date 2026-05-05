@@ -1,3 +1,8 @@
+5/5/2026
+-Migrated, generate_response, ingest_data and handle_query functions to RAG class in rag.py.
+-Updated all other files that implemented rag.py to reflect recent changes.
+-Generated new embeddings.
+
 5/4/2026
 -Edited default response in generate_response in rag.py.
 -Edited cosines similiarity threshold in rag.py's query handler.
