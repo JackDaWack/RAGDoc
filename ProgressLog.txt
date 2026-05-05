@@ -2,6 +2,10 @@
 -Migrated, generate_response, ingest_data and handle_query functions to RAG class in rag.py.
 -Updated all other files that implemented rag.py to reflect recent changes.
 -Generated new embeddings.
+-Implemented query and response handling in app.js.
+-Added Query class to main.py.
+-Added query_string and relevant_docs variables to main.py.
+-Implemented /query and /response endpoints.
 
 5/4/2026
 -Edited default response in generate_response in rag.py.

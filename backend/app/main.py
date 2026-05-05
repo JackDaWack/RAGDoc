@@ -1,13 +1,15 @@
 import os
-from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi import FastAPI
 import time
 import rag
 
 app = FastAPI()
-
 class Query(BaseModel):
     question: str
+
+relevant_docs = []
+query_string = ""
 
 def prep_rag():
     rag_instance = rag.RAG()
@@ -22,9 +24,13 @@ def read_root():
     return {"Hello": "World"}
 
 @app.post("/query")
-def query():
-    pass
+def query(data: Query):
+    query_string = data.question
+    rag_instance = prep_rag()
+    relevant_docs = rag_instance.handle_query(data.question)
 
 @app.post("/response")
 def get_response():
-    pass
+    rag_instance = prep_rag()
+    response = rag_instance.generate_response(query_string, relevant_docs)
+    return {"response": response}
