@@ -1,3 +1,6 @@
+6/6/2026
+-Edited readme and project mission.
+
 5/5/2026
 -Migrated, generate_response, ingest_data and handle_query functions to RAG class in rag.py.
 -Updated all other files that implemented rag.py to reflect recent changes.

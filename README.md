@@ -1,14 +1,8 @@
 # RAGDoc
-A document assistant that retrieves requested information from pdf documents for the user.
+A clinical document system that retrieves information from medical record pdfs through retrieval augmented generation (RAG) pipelines based on query.
 
 ### Project Status
 This project is currently in development and not yet functional. See ProgressLog.txt for updates to the project.
-
-#### Planned Features
-- Authentication with user Registry and Login.(In Progress)
-- User dashboard where user can submit documents and queries.
-- RAG Functionality.
-- Query responses from the AI model.
 
 ### Author Profile
 Jackson Netter
