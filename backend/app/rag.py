@@ -54,6 +54,15 @@ class RAG:
         with open(embedding_file, 'w') as f:
             json.dump(embeddings, f)
 
+    def chunk_text(self, text, max_tokens=8191):
+        encoding = tiktoken.encoding_for_model("text-embedding-3-large")
+        tokens = encoding.encode(text)
+        chunks = []
+        for i in range(0, len(tokens), max_tokens):
+            chunk_tokens = tokens[i:i + max_tokens]
+            chunks.append(encoding.decode(chunk_tokens))
+        return chunks
+
     # Retrieve relevant documents and include their text.
     def handle_query(self, query, top_k=1, threshold=0.3):
         response = self.ai_client.embeddings.create(input=query, model="text-embedding-3-large")
