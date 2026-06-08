@@ -3,6 +3,8 @@
 -Rmoved frontend folder.
 -Moved app and data folders.
 -Removed backend folder.
+-Created new rag_pipeline.py file to be where the rag pipeline processes are implemented.
+-Added OpenAI api and libraries to rag_pipeline.py.
 
 6/7/2026
 -Edited readme and project mission.
