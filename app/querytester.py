@@ -1,4 +1,4 @@
-import rag
+import app.rag as rag
 import os
 
 def test_query():

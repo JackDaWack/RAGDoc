@@ -1,4 +1,10 @@
-6/6/2026
+6/8/2026
+-Removed currently unnecessary py files.
+-Rmoved frontend folder.
+-Moved app and data folders.
+-Removed backend folder.
+
+6/7/2026
 -Edited readme and project mission.
 -Added text chunking to RAG class in rag.py
 

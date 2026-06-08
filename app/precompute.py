@@ -1,4 +1,4 @@
-import rag
+import app.rag as rag
 import os
 def precompute_embeddings():
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "documents"))
