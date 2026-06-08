@@ -5,6 +5,7 @@
 -Removed backend folder.
 -Created new rag_pipeline.py file to be where the rag pipeline processes are implemented.
 -Added OpenAI api and libraries to rag_pipeline.py.
+-Added skeleton base functions to rag_pipeline.py for later implementation.
 
 6/7/2026
 -Edited readme and project mission.
