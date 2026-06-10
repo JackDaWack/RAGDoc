@@ -44,8 +44,12 @@ def gen_embeds(chunks=None):
         embeds.append(response.data[0].embedding)
     return embeds
 
-def store_vectors():
-    pass
+def store_vectors(embeds=None):
+    if embeds is None:
+        embeds = gen_embeds()
+    else:
+        with open(os.path.join(path, "embeddings.json"), "w") as f:
+            json.dump(embeds, f)
 
 #Query Handling Functions:
 def query_to_embeds():

@@ -3,6 +3,7 @@
 -Removed rag.py
 -Implemented gen_embeds in rag_pipeline.py
 -Added parameters to implemented functions.
+-Implemented vector storage in rag_pipeline.py
 
 6/8/2026
 -Removed currently unnecessary py files.
