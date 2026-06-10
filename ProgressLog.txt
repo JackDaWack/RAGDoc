@@ -2,6 +2,7 @@
 -Implemented load_documents and chunk in rag_pipeline.py
 -Removed rag.py
 -Implemented gen_embeds in rag_pipeline.py
+-Added parameters to implemented functions.
 
 6/8/2026
 -Removed currently unnecessary py files.

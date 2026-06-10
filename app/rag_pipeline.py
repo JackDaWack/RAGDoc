@@ -13,28 +13,31 @@ if not os.path.exists(path):
     raise FileNotFoundError(f"Data directory not found: {path}")
 
 #Data Ingestion Functions:
-def load_documents():
+def load_documents(filepath=path):
     docs = []
-    for filename in os.listdir(path):
+    for filename in os.listdir(filepath):
         if filename.endswith(".pdf"):
-            with pdfplumber.open(os.path.join(path, filename)) as pdf:
+            with pdfplumber.open(os.path.join(filepath, filename)) as pdf:
                 text = "\n".join(page.extract_text() for page in pdf.pages)
                 docs.append(text)
     return docs
 
-def chunk():
+def chunk(docs=None):
+    if docs is None:
+        docs = load_documents()
     encoding = tiktoken.encoding_for_model("text-embedding-3-large")
     max_tokens = 8191
     chunks = []
-    for doc in load_documents():
+    for doc in docs:
         tokens = encoding.encode(doc)
         for i in range(0, len(tokens), max_tokens):
             chunk = encoding.decode(tokens[i:i + max_tokens])
             chunks.append(chunk)
     return chunks
 
-def gen_embeds():
-    chunks = chunk()
+def gen_embeds(chunks=None):
+    if chunks is None:
+        chunks = chunk()
     embeds = []
     for chunk in chunks:
         response = open_ai.embeddings.create(input=chunk, model="text-embedding-3-large")
