@@ -52,8 +52,9 @@ def store_vectors(embeds=None):
             json.dump(embeds, f)
 
 #Query Handling Functions:
-def query_to_embeds():
-    pass
+def query_to_embeds(query):
+    response = gen_embeds([query])
+    return response.data[0].embedding
 
 def retrieve_candidates():
     pass
