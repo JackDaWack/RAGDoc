@@ -34,7 +34,12 @@ def chunk():
     return chunks
 
 def gen_embeds():
-    pass
+    chunks = chunk()
+    embeds = []
+    for chunk in chunks:
+        response = open_ai.embeddings.create(input=chunk, model="text-embedding-3-large")
+        embeds.append(response.data[0].embedding)
+    return embeds
 
 def store_vectors():
     pass
