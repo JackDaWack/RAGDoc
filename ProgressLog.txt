@@ -1,3 +1,6 @@
+6/10/2026
+-Implemented load_documents and chunk in rag_pipeline.py
+
 6/8/2026
 -Removed currently unnecessary py files.
 -Rmoved frontend folder.

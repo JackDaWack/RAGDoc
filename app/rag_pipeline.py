@@ -14,10 +14,24 @@ if not os.path.exists(path):
 
 #Data Ingestion Functions:
 def load_documents():
-    pass
+    docs = []
+    for filename in os.listdir(path):
+        if filename.endswith(".pdf"):
+            with pdfplumber.open(os.path.join(path, filename)) as pdf:
+                text = "\n".join(page.extract_text() for page in pdf.pages)
+                docs.append(text)
+    return docs
 
 def chunk():
-    pass
+    encoding = tiktoken.encoding_for_model("text-embedding-3-large")
+    max_tokens = 8191
+    chunks = []
+    for doc in load_documents():
+        tokens = encoding.encode(doc)
+        for i in range(0, len(tokens), max_tokens):
+            chunk = encoding.decode(tokens[i:i + max_tokens])
+            chunks.append(chunk)
+    return chunks
 
 def gen_embeds():
     pass
