@@ -5,6 +5,7 @@
 -Added parameters to implemented functions.
 -Implemented vector storage in rag_pipeline.py
 -Implemented query_to_embeds in rag_pipeline.py
+-Partially implemented retrieve_candidates with base logic in loop.
 
 6/8/2026
 -Removed currently unnecessary py files.

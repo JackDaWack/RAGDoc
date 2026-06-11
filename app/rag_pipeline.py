@@ -56,8 +56,18 @@ def query_to_embeds(query):
     response = gen_embeds([query])
     return response.data[0].embedding
 
-def retrieve_candidates():
-    pass
+def retrieve_candidates(query_embedding, top_k=5):
+    with open(os.path.join(path, "embeddings.json"), "r") as f:
+        stored_embeds = json.load(f)
+    # Placeholder for similarity search logic
+    candidates = []  # This should be a list of the top_k most similar document chunks
+    for i, stored_embedding in enumerate(stored_embeds):
+        # Compute similarity (e.g., cosine similarity) between query_embedding and stored_embedding
+        # If it's among the top_k, add the corresponding document chunk to candidates
+        pass
+    return candidates
+
+    
 
 #Response Generation:
 def build_context():
