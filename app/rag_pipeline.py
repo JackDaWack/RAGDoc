@@ -59,19 +59,34 @@ def query_to_embeds(query):
 def retrieve_candidates(query_embedding, top_k=5):
     with open(os.path.join(path, "embeddings.json"), "r") as f:
         stored_embeds = json.load(f)
-    # Placeholder for similarity search logic
-    candidates = []  # This should be a list of the top_k most similar document chunks
+        candidates = []  
     for i, stored_embedding in enumerate(stored_embeds):
         # Compute similarity (e.g., cosine similarity) between query_embedding and stored_embedding
         # If it's among the top_k, add the corresponding document chunk to candidates
-        pass
+        similarity = torch.nn.functional.cosine_similarity(torch.tensor(query_embedding), torch.tensor(stored_embedding), dim=0)
+        if len(candidates) < top_k:
+            candidates.append((similarity, i))
+        else:
+            candidates.sort(reverse=True)
+            if similarity > candidates[-1][0]:
+                candidates[-1] = (similarity, i)
     return candidates
 
     
 
 #Response Generation:
-def build_context():
-    pass
+def build_context(query):
+    query_embedding = query_to_embeds(query)
+    candidates = retrieve_candidates(query_embedding)
+    return candidates
 
-def answer_query():
-    pass
+def answer_query(relevant_chunks, query):
+    context = "\n".join(relevant_chunks)
+    prompt = f"Context: {context}\n\nQuestion: {query}\nAnswer:"
+    response = open_ai.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "system", "content": "You are a helpful assistant."},
+                  {"role": "user", "content": prompt}],
+        max_tokens=500
+    )
+    return response.choices[0].message.content.strip()

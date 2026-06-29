@@ -1,3 +1,7 @@
+6/29/2026
+-Implemented similarity computation and comparision in rag_pipeline.py.
+-Implemented context building and query response generation in rag_pipeline.py.
+
 6/10/2026
 -Implemented load_documents and chunk in rag_pipeline.py
 -Removed rag.py
