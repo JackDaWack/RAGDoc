@@ -3,6 +3,7 @@
 -Implemented context building and query response generation in rag_pipeline.py.
 -Re-implemented precompute.py based on new rag_pipeline.py functions.
 -Precomputed new embeddings.
+-Re-implemented querytester.py based on new rag_pipeline.py implementation.
 
 6/10/2026
 -Implemented load_documents and chunk in rag_pipeline.py
