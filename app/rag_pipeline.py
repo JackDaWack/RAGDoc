@@ -53,7 +53,7 @@ def store_vectors(embeds=None):
 
 #Query Handling Functions:
 def query_to_embeds(query):
-    response = gen_embeds([query])
+    response = open_ai.embeddings.create(input=query, model="text-embedding-3-large")
     return response.data[0].embedding
 
 def retrieve_candidates(query_embedding, top_k=5):
