@@ -1,10 +1,10 @@
-import app.rag as rag
-import os
+import rag_pipeline as rag
+
 def precompute_embeddings():
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "documents"))
-    embedding_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "embeddings.json"))
-    rag_instance = rag.RAG()
-    rag_instance.ingest_data(path, embedding_file)
+    docs = rag.load_documents()
+    chunks = rag.chunk(docs)
+    embeds = rag.gen_embeds(chunks)
+    rag.store_vectors(embeds)
 
 if __name__ == "__main__":
     precompute_embeddings()
