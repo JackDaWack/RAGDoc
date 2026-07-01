@@ -1,5 +1,6 @@
 import os
 import json
+from click import prompt
 import torch
 import pdfplumber
 from openai import OpenAI
@@ -78,13 +79,12 @@ def build_context(query):
     candidates = retrieve_candidates(query_embedding)
     return candidates
 
-def answer_query(embeds, query):
-    context = " ".join([chunk for _, chunk in embeds])
-    prompt = f"Answer the following query based on the context provided:\n\nContext: {context}\n\nQuery: {query}\n\nAnswer:"
+def answer_query(context, query):
+    prompt_info = f"Context: {context}\n\nQuestion: {query}\nAnswer:"
     response = open_ai.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "system", "content": "You are a helpful assistant."},
-                  {"role": "user", "content": prompt}],
+                  {"role": "user", "content": prompt_info}],
         max_tokens=500
     )
     return response.choices[0].message.content.strip()

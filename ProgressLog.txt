@@ -2,6 +2,7 @@
 -Edited emebedding generation in rag_pipeline.py.
 -Generated new embeddings.
 -Fixed for loop in retrieve_candidates in rag_pipeline.py.
+-Edited response generation in rag_pipeline.py
 
 6/29/2026
 -Implemented similarity computation and comparision in rag_pipeline.py.
