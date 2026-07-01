@@ -8,8 +8,7 @@ def test_query():
         if query.lower() == "exit":
             break
         relevant_chunks = rag.build_context(query)
-        response = rag.answer_query(relevant_chunks, query)
-        print("Response:", response)
+        print(f"Relevant Chunks for the query '{query}': {relevant_chunks}")
 
 if __name__ == "__main__":
     test_query()

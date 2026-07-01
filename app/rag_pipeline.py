@@ -41,7 +41,7 @@ def gen_embeds(chunks=None):
     embeds = []
     for chunk in chunks:
         response = open_ai.embeddings.create(input=chunk, model="text-embedding-3-large")
-        embeds.append(response.data[0].embedding)
+        embeds.append((chunk, response.data[0].embedding))
     return embeds
 
 def store_vectors(embeds=None):
@@ -71,18 +71,16 @@ def retrieve_candidates(query_embedding, top_k=5):
             if similarity > candidates[-1][0]:
                 candidates[-1] = (similarity, i)
     return candidates
-
-    
-
+ 
 #Response Generation:
 def build_context(query):
     query_embedding = query_to_embeds(query)
     candidates = retrieve_candidates(query_embedding)
     return candidates
 
-def answer_query(relevant_chunks, query):
-    context = "\n".join(relevant_chunks)
-    prompt = f"Context: {context}\n\nQuestion: {query}\nAnswer:"
+def answer_query(embeds, query):
+    context = " ".join([chunk for _, chunk in embeds])
+    prompt = f"Answer the following query based on the context provided:\n\nContext: {context}\n\nQuery: {query}\n\nAnswer:"
     response = open_ai.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "system", "content": "You are a helpful assistant."},
@@ -90,3 +88,4 @@ def answer_query(relevant_chunks, query):
         max_tokens=500
     )
     return response.choices[0].message.content.strip()
+    
