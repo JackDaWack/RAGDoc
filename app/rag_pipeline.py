@@ -60,16 +60,16 @@ def retrieve_candidates(query_embedding, top_k=5):
     with open(os.path.join(path, "embeddings.json"), "r") as f:
         stored_embeds = json.load(f)
         candidates = []  
-    for i, stored_embedding in enumerate(stored_embeds):
-        # Compute similarity (e.g., cosine similarity) between query_embedding and stored_embedding
-        # If it's among the top_k, add the corresponding document chunk to candidates
-        similarity = torch.nn.functional.cosine_similarity(torch.tensor(query_embedding), torch.tensor(stored_embedding), dim=0)
-        if len(candidates) < top_k:
-            candidates.append((similarity, i))
-        else:
-            candidates.sort(reverse=True)
-            if similarity > candidates[-1][0]:
-                candidates[-1] = (similarity, i)
+        for chunk, embedding in stored_embeds:
+            # Compute similarity (e.g., cosine similarity) between query_embedding and stored_embedding
+            similarity = torch.nn.functional.cosine_similarity(torch.tensor(query_embedding), torch.tensor(embedding), dim=0)
+            # If it's among the top_k, add the corresponding document chunk to candidates
+            if len(candidates) < top_k:
+                candidates.append((similarity.item(), chunk))
+            else:
+                candidates.sort(reverse=True)
+                if similarity.item() > candidates[-1][0]:
+                    candidates[-1] = (similarity.item(), chunk)
     return candidates
  
 #Response Generation:
