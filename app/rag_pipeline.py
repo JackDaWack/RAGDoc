@@ -86,7 +86,7 @@ def answer_query(context, query):
     prompt_info = f"Context: {context}\n\nQuestion: {query}\nAnswer:"
     response = open_ai.chat.completions.create(
         model="gpt-4o",
-        messages=[{"role": "system", "content": "You are a helpful assistant."},
+        messages=[{"role": "system", "content": "You are a helpful assistant. Answer the question based on the provided context. If the answer is not contained within the context, respond with 'I don't know, based on the provided context.'"},
                   {"role": "user", "content": prompt_info}],
         max_tokens=500
     )

@@ -2,6 +2,7 @@
 -Fixed build_context function in rag_pipeline.py to return a LiteralString type.
 -Edited default top_k element parameters in retrieve_candidates in rag_pipeline.py.
 -Implemented chunk chunk size in document chunking.
+-Edited prompt for the model.
 
 6/30/2026
 -Edited emebedding generation in rag_pipeline.py.
