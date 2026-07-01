@@ -29,10 +29,11 @@ def chunk(docs=None):
     encoding = tiktoken.encoding_for_model("text-embedding-3-large")
     max_tokens = 8191
     chunks = []
+    chunk_size = 1000  # Number of tokens per chunk
     for doc in docs:
         tokens = encoding.encode(doc)
-        for i in range(0, len(tokens), max_tokens):
-            chunk = encoding.decode(tokens[i:i + max_tokens])
+        for i in range(0, len(tokens), chunk_size):
+            chunk = encoding.decode(tokens[i:i + chunk_size])
             chunks.append(chunk)
     return chunks
 
@@ -57,7 +58,7 @@ def query_to_embeds(query):
     response = open_ai.embeddings.create(input=query, model="text-embedding-3-large")
     return response.data[0].embedding
 
-def retrieve_candidates(query_embedding, top_k=5):
+def retrieve_candidates(query_embedding, top_k=3):
     with open(os.path.join(path, "embeddings.json"), "r") as f:
         stored_embeds = json.load(f)
         candidates = []  
@@ -76,8 +77,10 @@ def retrieve_candidates(query_embedding, top_k=5):
 #Response Generation:
 def build_context(query):
     query_embedding = query_to_embeds(query)
+    #should return the top_k most relevant document chunks based on similarity to the query embedding
     candidates = retrieve_candidates(query_embedding)
-    return candidates
+    context = "\n\n".join([chunk for _, chunk in candidates])
+    return context
 
 def answer_query(context, query):
     prompt_info = f"Context: {context}\n\nQuestion: {query}\nAnswer:"
